@@ -3,22 +3,23 @@ import java.util.ArrayList;
 public class Main {
 
     public static void main(String[] args) {
-        // write your code here
+
         OnlineShop onlineShop = new OnlineShop("Emag", "logo.jpg", new ArrayList<Product>());
 
-        Product p1 = new Product("Laptop", 3200.5, 1,1, 1123, "");
-        Product p2 = new Product("Frigider", 207.95, 1,2, 1245, "");
+        Product product1 = new Product("Laptop", 3200.5, 1,1, 1123, "");
+        Product product2 = new Product("Frigider", 207.95, 1,2, 1245, "");
 
-        Product p3 = new Product(p1);
+        Product product3 = new Product(product1);
 
-        p3.setQty(5);
-        p3.setName("Paine");
+        product3.setQuantity(5);
+        product3.setName("Paine");
 
-        onlineShop.addProduct(p1);
-        onlineShop.addProduct(p2);
-        onlineShop.removeProduct(p1);
+        onlineShop.addProduct(product1);
+        onlineShop.addProduct(product2);
 
-        System.out.println(p1.areProductsTheSame(p2));
+        onlineShop.removeProduct(product1);
+
+        System.out.println(product1.isEqual(product2));
     }
 }
 
@@ -27,10 +28,10 @@ class OnlineShop {
     private String image;
     private ArrayList<Product> products;
 
-    OnlineShop(String name, String img, ArrayList<Product> products)
+    OnlineShop(String name, String image, ArrayList<Product> products)
     {
         this.products = new ArrayList<Product>();
-        this.image= img;
+        this.image = image;
         this.name = name;
     }
 
@@ -40,6 +41,7 @@ class OnlineShop {
     public void removeProduct(Product product){
         this.products.remove(product);
     }
+
     public String getName() {
         return name;
     }
@@ -53,7 +55,7 @@ class OnlineShop {
     }
 
     public void setImage(String image) {
-        this.image= image;
+        this.image = image;
     }
 }
 
@@ -64,9 +66,9 @@ class Product
     private double price;
     private int type;
     private int category;
-    private int qty;
-    private String expiryDate; //expiry date - only for goods
-    private String details; // ex.: processor, memory, power, volume (for refrigerators etc)
+    private int quantity;
+    private String expiryDate;
+    private String details;
 
     public Product(String name, double price, int type, int category, int id, String expiryDate)
     {
@@ -78,13 +80,13 @@ class Product
         this.expiryDate = expiryDate;
     }
 
-    public Product(Product p)
+    public Product(Product product)
     {
-        this.name = p.name;
-        this.price = p.price;
-        this.type = p.type;
-        this.category = p.category;
-        this.id = p.id;
+        this.name = product.name;
+        this.price = product.price;
+        this.type = product.type;
+        this.category = product.category;
+        this.id = product.id;
     }
 
     public double getPrice() {
@@ -111,17 +113,18 @@ class Product
         this.type = type;
     }
 
-    public boolean areProductsTheSame(Product p)
+
+    public boolean isEqual(Product product)
     {
-        if(p.id != this.id)
+        if(product.id != this.id)
             return false;
-        if(!p.name.equals(this.name))
+        if(!product.name.equals(this.name))
             return false;
-        if(p.price != this.price)
+        if(product.price != this.price)
             return false;
-        if(p.type != p.type)
+        if(product.type != this.type)
             return false;
-        if(p.category != this.category)
+        if(product.category != this.category)
             return false;
 
         return true;
@@ -134,12 +137,12 @@ class Product
         this.price-=this.price*val/100;
     }
 
-    public int getQty() {
-        return qty;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setQty(int qty) {
-        this.qty = qty;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public int getId() {
@@ -161,42 +164,50 @@ class Product
 
 class User
 {
-    private String username;
+    private String name;
     private String id;
     private ArrayList<Order> orders;
+    private ArrayList<Order> cart;
 
-    public User(String username, String id)
+    public User(String name, String id)
     {
-        this.username = username;
+        this.name = name;
         this.id = id;
-        orders=new ArrayList<Order>();
+        this.orders = new ArrayList<Order>();
+        this.cart = new ArrayList<Order>();
     }
 
-    public void addOrder(Order order){
+    public void addOrder(Order order)
+    {
         this.orders.add(order);
+    }
+
+    public void addToCart(Order order)
+    {
+        this.cart.add(order);
     }
 }
 
 class Order
 {
-    private ArrayList<Product> listOfProducts;
+    private ArrayList<Product> products;
     private String address;
 
     public Order()
     {
-        listOfProducts= new ArrayList<Product>();
+        products = new ArrayList<Product>();
     }
-    public void addProductToOrder(Product p)
+    public void addProduct(Product product)
     {
-        if(listOfProducts.size() > 99)
+        if(products.size() > 99)
             return;
 
-        listOfProducts.add(p);
+        products.add(product);
     }
 
-    public void removeProductFromOrder(Product p)
+    public void removeProduct(Product product)
     {
-        listOfProducts.remove(p);
+        products.remove(product);
     }
 
     public String getAddress() {
@@ -208,15 +219,15 @@ class Order
     }
 }
 
-class InventoryP
+class Inventory
 {
     private Product product;
-    private int qty;
+    private int quantity;
 
-    public InventoryP(Product product, int qty)
+    public Inventory(Product product, int quantity)
     {
         this.product = new Product(product);
-        this.qty = qty;
+        this.quantity = quantity;
     }
     public Product getProduct() {
         return product;
@@ -226,13 +237,12 @@ class InventoryP
         this.product = product;
     }
 
-    public int getQty() {
-        return qty;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setQty(int qty) {
-        this.qty = qty;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }
-
 
