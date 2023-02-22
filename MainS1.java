@@ -114,20 +114,18 @@ class Product
     }
 
 
-    public boolean isEqual(Product product)
-    {
+    public boolean isEqual(Product product) {
         if(product.id != this.id)
+                || (!product.name.equals(this.name))
+                || (product.price != this.price)
+                || (product.type != this.type)
+                || (product.category != this.category)){
             return false;
-        if(!product.name.equals(this.name))
-            return false;
-        if(product.price != this.price)
-            return false;
-        if(product.type != this.type)
-            return false;
-        if(product.category != this.category)
-            return false;
+        }
+        else{
+            return true;
+        }
 
-        return true;
     }
 
     public void multiplyPrice(double val){
@@ -169,21 +167,18 @@ class User
     private ArrayList<Order> orders;
     private ArrayList<Order> cart;
 
-    public User(String name, String id)
-    {
+    public User(String name, String id){
         this.name = name;
         this.id = id;
         this.orders = new ArrayList<Order>();
         this.cart = new ArrayList<Order>();
     }
 
-    public void addOrder(Order order)
-    {
+    public void addOrder(Order order){
         this.orders.add(order);
     }
 
-    public void addToCart(Order order)
-    {
+    public void addToCart(Order order){
         this.cart.add(order);
     }
 }
@@ -245,4 +240,3 @@ class Inventory
         this.quantity = quantity;
     }
 }
-
